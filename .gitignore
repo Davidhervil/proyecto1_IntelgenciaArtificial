@@ -1,5 +1,6 @@
 *.o
 *.dist
+*.dist_pdb
 *.distSummary
 *.succ
 *.noPruneSearch
