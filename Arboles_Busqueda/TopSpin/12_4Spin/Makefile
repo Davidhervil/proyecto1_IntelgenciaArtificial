@@ -51,6 +51,10 @@ abstractor:
 	$(CXX) $(OPT) ../../../psvn-for-ci5437/global/dist_pdb.cpp -include $< -o $@
 	rm -f $*.c
 
+%.ida: %.c ../../../psvn-for-ci5437/global/ida.cpp
+	$(CXX) $(OPT) ../../../psvn-for-ci5437/global/ida.cpp -include $< -o $@
+	rm -f $*.c
+
 .PHONY: clean
 clean:
 	rm -fr *.succ *.dist *.distSummary *.noPruneSearch *.dist_pdb psvn2c_core.c psvn2c_state_map.c psvn2c_abstraction.c *.dSYM *.o *~
