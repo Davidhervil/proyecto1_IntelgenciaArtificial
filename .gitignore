@@ -1,5 +1,7 @@
 abstractor
 *.abst
+*.breathFirstSearch
+*.ida
 *.pdb
 *.o
 *.dist
@@ -8,4 +10,3 @@ abstractor
 *.succ
 *.noPruneSearch
 *~
-psvn-for-ci5437/*
