@@ -4,7 +4,7 @@
 CC = gcc
 CXX = g++
 OPT = -g -Wall -O3 -Wno-unused-function -Wno-unused-variable
-PSVNOPT = --state_map --no_abstraction --backwards_moves --history_len=0
+PSVNOPT = --state_map --abstraction --backwards_moves --history_len=0
 
 psvn2c_core.c:
 	cp ../../../psvn-for-ci5437/src/psvn2c_core.c ./psvn2c_core.c
@@ -47,10 +47,11 @@ abstractor:
 	echo Calculating `basename $*.pdb` ...
 	@./`basename $*`.distSummary `basename $*`.pdb
 
-%.dist_pdb: %.c ../global/dist_pdb.cpp
+%.dist_pdb: %.c ../../../psvn-for-ci5437/global/dist_pdb.cpp
 	$(CXX) $(OPT) ../../../psvn-for-ci5437/global/dist_pdb.cpp -include $< -o $@
 	rm -f $*.c
 
 .PHONY: clean
 clean:
 	rm -fr *.succ *.dist *.distSummary *.noPruneSearch *.dist_pdb psvn2c_core.c psvn2c_state_map.c psvn2c_abstraction.c *.dSYM *.o *~
+	
