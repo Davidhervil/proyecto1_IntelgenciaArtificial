@@ -10,3 +10,6 @@ abstractor
 *.succ
 *.noPruneSearch
 *~
+psvn-for-ci5437/Lesson*
+psvn-for-ci5437/bin*
+psvn-for-ci5437/src*
