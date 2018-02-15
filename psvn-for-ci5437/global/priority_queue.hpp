@@ -20,7 +20,7 @@ public:
     int CurrentPriority() const;
     bool Empty() const;
     void Pop();
-    void Clear();z
+    void Clear();
 
     void Modify(int f, int g, int index, const T& data);
 
