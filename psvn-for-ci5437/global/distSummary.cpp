@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
     int d, ruleid;
     ruleid_iterator_t iter;
 
-    PriorityQueue<state_t> open; // used for the states we have generated but not yet expanded (the OPEN list)
+    PriorityQueue<state_t> open;        // used for the states we have generated but not yet expanded (the OPEN list)
     state_map_t *map = new_state_map(); // contains the cost-to-goal for all states that have been generated
     FILE *file; // the final state_map is written to this file if it is provided (command line argument)
 
