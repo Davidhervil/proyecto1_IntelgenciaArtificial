@@ -1,4 +1,5 @@
 #include <vector>
+#include <iostream>
 #include "priority_queue.hpp"
 
 int main(int argc, char **argv) {
@@ -10,8 +11,10 @@ int main(int argc, char **argv) {
     const char *pdb_name = argv[1];
 
     // open pdb
+    std::cout<<"Opening PDB "<< pdb_name <<std::endl;
     char pdb_fname[1024], abst_fname[1024];
     strcpy(pdb_fname, pdb_name);
+    
     strcat(pdb_fname, ".pdb");
     strcpy(abst_fname, pdb_name);
     strcat(abst_fname, ".abst");
