@@ -9,7 +9,7 @@ abstractor
 *.distSummary
 *.iterativeDeepening
 *.succ
-*.noPruneSearch
+*.noPruneExplore
 *~
 psvn-for-ci5437/Lesson*
 psvn-for-ci5437/bin*
