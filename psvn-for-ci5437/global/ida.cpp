@@ -2,11 +2,14 @@
 #include "priority_queue.hpp"
 #include <utility>
 #include <climits>
+#define  MAX_LINE_LENGTH 999 
 
 abstraction_t *abst;
 state_map_t *pdb;
 state_t state, child;
 int d, ruleid;
+ssize_t nchars; 
+char str[MAX_LINE_LENGTH + 1];
 ruleid_iterator_t iter;
 int history = init_history;
 
@@ -17,13 +20,19 @@ int main(int argc, char **argv) {
         exit(-1);
     }
     const char *pdb_name = argv[1];
-
+    // READ A LINE OF INPUT FROM stdin
+    printf("Please enter a state followed by ENTER: ");
+    if( fgets(str, sizeof str, stdin) == NULL ) {
+        printf("Error: empty input line.\n");
+        return 0; 
+    }
     // Preprocesamiento de strings.
     char pdb_fname[1024], abst_fname[1024];
     strcpy(pdb_fname, pdb_name);
     strcat(pdb_fname, ".pdb");
     strcpy(abst_fname, pdb_name);
     strcat(abst_fname, ".abst");
+    nchars = read_state(str,&state);
     printf("PDB: abst=%s", abst_fname);
 
     // Abrir archivos
