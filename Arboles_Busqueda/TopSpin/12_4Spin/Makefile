@@ -40,6 +40,10 @@ psvn2c_abstraction.c:
 abstractor:
 	$(CXX) $(OPT) ../../../psvn-for-ci5437/src/abstractor.cpp ../../../psvn-for-ci5437/src/psvn.cpp -o $@
 
+generator: $(ss).c
+	$(CXX) $(OPT) ../../../psvn-for-ci5437/global/generator.cc -include $< -o $@
+	#rm -f ./generator.cc 
+
 %.pdb: abstractor
 	@rm -f `basename $*`.abst `basename $*`.pdb `basename $*`.psvn
 	./abstractor `dirname $*`.psvn `basename $*` < `basename $*`.txt
