@@ -13,5 +13,5 @@ abstractor
 *.parcialPruneExplore
 *~
 psvn-for-ci5437/Lesson*
-psvn-for-ci5437/bin/*
+psvn-for-ci5437/bin/psvn2c
 psvn-for-ci5437/src*
