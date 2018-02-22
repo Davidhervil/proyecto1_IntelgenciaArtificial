@@ -1,11 +1,5 @@
 /*
-This program computes the distance to goal (i.e. the cost of the least-cost path to the goal)
-of every state from which the goal can be reached.
-It does this by executing Dijkstra's algorithm backwards from the goal.
-It prints on stdout each state and its distance (distance first, then the state) and, if a filename is
-provided as a command line argument, it prints the state_map it builds to that file.
 
-Copyright (C) 2013 by the PSVN Research Group, University of Alberta
 */
 
 #include <vector>
