@@ -1,6 +1,4 @@
-project 2
-project 4
-project 6
-project 8
-project 10
-project 12
+map 12 1 0
+map 12 2 0
+map 12 3 0
+map 12 4 0

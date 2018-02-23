@@ -1,0 +1,21 @@
+# This file was created by the abstractor program.
+# The source PSVN file was: topsin12_4s.psvn
+# The abstraction used is stored in file: absEven.abst
+
+12
+12 12 12 12 12 12 12 12 12 12 12 12
+
+X1 X2 X3 X4 - - - - - - - - => X4 X3 X2 X1 - - - - - - - - LABEL REVAT0 COST 1
+- X1 X2 X3 X4 - - - - - - - => - X4 X3 X2 X1 - - - - - - - LABEL REVAT1 COST 1
+- - X1 X2 X3 X4 - - - - - - => - - X4 X3 X2 X1 - - - - - - LABEL REVAT2 COST 1
+- - - X1 X2 X3 X4 - - - - - => - - - X4 X3 X2 X1 - - - - - LABEL REVAT3 COST 1
+- - - - X1 X2 X3 X4 - - - - => - - - - X4 X3 X2 X1 - - - - LABEL REVAT4 COST 1
+- - - - - X1 X2 X3 X4 - - - => - - - - - X4 X3 X2 X1 - - - LABEL REVAT5 COST 1
+- - - - - - X1 X2 X3 X4 - - => - - - - - - X4 X3 X2 X1 - - LABEL REVAT6 COST 1
+- - - - - - - X1 X2 X3 X4 - => - - - - - - - X4 X3 X2 X1 - LABEL REVAT7 COST 1
+T1 T2 T3 T4 T5 T6 T7 T8 X1 X2 X3 X4 => X3 X2 X1 T1 T2 T3 T4 T5 T6 T7 T8 X4 LABEL REVAT8 COST 1
+X4 T1 T2 T3 T4 T5 T6 T7 T8 X1 X2 X3 => X2 X1 T1 T2 T3 T4 T5 T6 T7 T8 X4 X3 LABEL REVAT9 COST 1
+X3 X4 T1 T2 T3 T4 T5 T6 T7 T8 X1 X2 => X1 T1 T2 T3 T4 T5 T6 T7 T8 X4 X3 X2 LABEL REVAT10 COST 1
+X2 X3 X4 T1 T2 T3 T4 T5 T6 T7 T8 X1 => T1 T2 T3 T4 T5 T6 T7 T8 X4 X3 X2 X1 LABEL REVAT11 COST 1
+
+GOAL 0 0 0 0 0 5 6 7 8 9 10 11
