@@ -1,0 +1,3 @@
+make clean
+make topsin14_4s.parcialPruneExplore
+timeout 900 ./topsin14_4s.parcialPruneExplore parcialPruneExploreResults_topsin14_4s

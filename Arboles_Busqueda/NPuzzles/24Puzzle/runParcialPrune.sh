@@ -1,0 +1,3 @@
+make clean
+make 24puzzle.parcialPruneExplore
+timeout 900 ./24puzzle.parcialPruneExplore parcialPruneExploreResults_24puzzle

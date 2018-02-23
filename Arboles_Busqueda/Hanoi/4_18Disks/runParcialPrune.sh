@@ -1,0 +1,3 @@
+make clean
+make hanoi4_18d.parcialPruneExplore
+timeout 900 ./hanoi4_18d.parcialPruneExplore parcialPruneExploreResults_hanoi4_18d
