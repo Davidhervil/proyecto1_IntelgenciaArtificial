@@ -65,10 +65,10 @@ std::pair<bool,unsigned int> dfs_ida(unsigned int bound,unsigned int g, int hist
     init_fwd_iter(&iter, &state);
 
     while( (ruleid = next_ruleid(&iter) ) >= 0 && difftime(end,start)<timeout) {
-        generatedCount++;                                          // Agregar cada hijo generado a la cuenta.
         if( !fwd_rule_valid_for_history(history, ruleid )){
             continue;
         }
+        generatedCount++;                                          // Agregar cada hijo generado a la cuenta.
         int aux_history = next_fwd_history(history,ruleid);
         cost = g + get_fwd_rule_cost(ruleid);
         apply_fwd_rule(ruleid, &state, &child);   
