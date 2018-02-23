@@ -7,24 +7,32 @@
 #include <fstream>
 #include <string>
 #include <ctime>
+#include <unistd.h>
+#include <vector>
 
-abstraction_t *abst;
-state_map_t *pdb;
 state_t state, child;
-int d, timeout;
-ssize_t nchars; 
-
+int timeout;
+ssize_t nchars;
+std::vector<abstraction_t *> abstractions;    // Vector de abstracciones
+std::vector<state_map_t *>   pdbs;            // Vector de pdbs
+double dif;
 // Variables de control
-int generatedCount = 0, instancia = 0; // Numero de nodos generados
-time_t start,end;       // Tiempo de inicio
-
+long long generatedCount, expandedCount;
+int instancia = 0; // Numero de nodos generados
+time_t start,end;  // Tiempo de inicio
 
 unsigned int h_value()
 {
-    state_t abst_state;
-    abstract_state(abst, &state, &abst_state);
-    int *pdb_value = state_map_get(pdb, &abst_state);
-    return *pdb_value;
+    unsigned int value = 0;
+    for (unsigned int i=0; i<pdbs.size(); i++){
+        state_t abst_state;
+        abstract_state((abstractions)[i], &state, &abst_state);
+        int *pdb_value = state_map_get((pdbs)[i], &abst_state);
+        if(*pdb_value > value){
+            value = *pdb_value;
+        }
+    }
+    return value;
 }
 
 std::pair<bool,unsigned int> dfs_ida(unsigned int bound,unsigned int g, int history)
@@ -35,13 +43,18 @@ std::pair<bool,unsigned int> dfs_ida(unsigned int bound,unsigned int g, int hist
     unsigned long int cost;
     int ruleid;
     ruleid_iterator_t iter;
-    generatedCount++;                                                           // Agregar cada hijo generado a la cuenta.
-    if(f>bound) return std::pair<unsigned int, unsigned int>(false, f);         // Si el f > h, no hay solucion en la rama
-    if(h_value()==0) return std::pair<unsigned int, unsigned int>(true, g);     // Se encontro el goal.
+    expandedCount++;
+    if(f > bound){
+        return std::pair<unsigned int, unsigned int>(false, f);    // Si el f > h, no hay solucion en la rama
+    } 
+    if(h_value()==0){
+        return std::pair<unsigned int, unsigned int>(true, g);     // Se encontro el goal.
+    } 
 
     init_fwd_iter(&iter, &state);
-    while( (ruleid = next_ruleid(&iter) ) >= 0) {
-        //printf("hola\n");
+
+    while( (ruleid = next_ruleid(&iter) ) >= 0 && difftime(end,start)<timeout) {
+        generatedCount++;                                          // Agregar cada hijo generado a la cuenta.
         if( !fwd_rule_valid_for_history(history, ruleid )){
             continue;
         }
@@ -51,27 +64,28 @@ std::pair<bool,unsigned int> dfs_ida(unsigned int bound,unsigned int g, int hist
         state = child;
         if(h_value() < UINT_MAX)
         {
-            //printf("Aqui\n");
             std::pair<bool, unsigned int> p = dfs_ida(bound, cost, aux_history);
             if(p.first) return p;
             t = std::min(t, p.second);
         }
         apply_bwd_rule(ruleid, &state, &child);
-        //history = next_bwd_history(aux_history, ruleid);
+        aux_history = next_bwd_history(aux_history, ruleid);
         state = child;
+        time (&end);
     }
     return std::pair<unsigned int, unsigned int>(false, t);
 }
 
-int idaStar(){
-    while(true)
+unsigned int idaStar(){
+    unsigned int bound  = h_value();
+    while(difftime(end,start) < timeout)
     {
-        unsigned int bound  = h_value();
         std::pair<bool, unsigned int> p = dfs_ida(bound, 0, init_history);
-        if(p.first) return 0;
-            bound = p.second;
+        if(p.first) return p.second;
+        bound = p.second;
+        time (&end);
     }
-    return 1;
+    return bound;
 }
 
 int main(int argc, char **argv) {
@@ -83,30 +97,42 @@ int main(int argc, char **argv) {
     // Leer archivos
     char pdb_fname[1024], test_fname[1024], abst_fname[1024];
     timeout = atoi(argv[1]);          // Tiempo maximo permitido.
-    const char *pdb_name  = argv[2];  // PDB a utilizar. (Debe ser una lista).
 
-    strcpy(pdb_fname, pdb_name);      // Crear nombres con extensiones.
-    strcat(pdb_fname, ".pdb");        
-    strcpy(abst_fname, pdb_name);
-    strcat(abst_fname, ".abst");
+    char line[1024];
+    std::ifstream infile(argv[2]);
+    while (infile >> line){
+        // Cargar PDBs y abstracciones.
+        const char *pdb_name  = line;  // PDB a utilizar. (Debe ser una lista).
+        strcpy(pdb_fname, pdb_name);      // Crear nombres con extensiones.
+        strcat(pdb_fname, ".pdb");        
+        strcpy(abst_fname, pdb_name);
+        strcat(abst_fname, ".abst");
+        FILE *pdb_file = fopen(pdb_fname, "r");          // Abrir y Leer PDB
+        pdbs.push_back(read_state_map(pdb_file));        // Guardar PDB y ABS. 
+        abstractions.push_back(read_abstraction_from_file(abst_fname));
+        fclose(pdb_file);
+    }
 
-    // Cargar PDBs y abstracciones.
-    abst = read_abstraction_from_file(abst_fname);   // Leer ABS
-    FILE *pdb_file = fopen(pdb_fname, "r");          // Abrir y Leer PDB
-    pdb = read_state_map(pdb_file);
-    fclose(pdb_file);
-
-    printf("MEMES\n");
-    // Leer linea por linea de la libreria estandar          
+    // Leer linea por linea de la entrada estandar          
     char testCase[4098];
     while(fgets(testCase, sizeof(testCase), stdin))
     {
+        FILE * pFile;
+        pFile = fopen ("resultsIda.txt","a");
         generatedCount = 0;
+        expandedCount = 0;
         nchars = read_state((const char *)testCase, &state);  // Crear estado
+        time (&start);
+        time (&end);
         int result = idaStar();
-        printf("%d : %s : %d Result %d \n",instancia,testCase,generatedCount,result);
+        time (&end);
+        dif = difftime(end,start);
+        printf("%d : %s : %lld %lld %lf %d %g \n",instancia, testCase ,expandedCount, generatedCount, dif, result, generatedCount/dif);
+        fprintf(pFile, "%d : %s : %lld %lld %lf %d %g \n",instancia, testCase,expandedCount, generatedCount, dif, result, generatedCount/dif);
+        fclose (pFile);
         instancia++;
     }
+
 }
 
 

@@ -1,0 +1,30 @@
+# This file was created by the abstractor program.
+# The source PSVN file was: rubik3Sticker.psvn
+# The abstraction used is stored in file: absRubik2.abst
+
+DOMAIN COLOUR 6
+  RED GREEN BLUE YELLOW ORANGE WHITE
+
+48
+COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1 COLOUR 1
+
+UB - UR - UF - UL - FU - FR - FD - FL - RU - RB - RD - RF - BU - BL - BD - BR - LU - LF - LD - LB - DF - DR - DB - DL - => UL - UB - UR - UF - RU - FR - FD - FL - BU - RB - RD - RF - LU - BL - BD - BR - FU - LF - LD - LB - DF - DR - DB - DL - LABEL UCW COST 1
+UB - UR - UF - UL - FU - FR - FD - FL - RU - RB - RD - RF - BU - BL - BD - BR - LU - LF - LD - LB - DF - DR - DB - DL - => UF - UL - UB - UR - BU - FR - FD - FL - LU - RB - RD - RF - FU - BL - BD - BR - RU - LF - LD - LB - DF - DR - DB - DL - LABEL U180 COST 1
+UB - UR - UF - UL - FU - FR - FD - FL - RU - RB - RD - RF - BU - BL - BD - BR - LU - LF - LD - LB - DF - DR - DB - DL - => UR - UF - UL - UB - LU - FR - FD - FL - FU - RB - RD - RF - RU - BL - BD - BR - BU - LF - LD - LB - DF - DR - DB - DL - LABEL UCCW COST 1
+UB - UR - UF - UL - FU - FR - FD - FL - RU - RB - RD - RF - BU - BL - BD - BR - LU - LF - LD - LB - DF - DR - DB - DL - => UB - UR - LF - UL - FL - FU - FR - FD - RU - RB - RD - UF - BU - BL - BD - BR - LU - DF - LD - LB - RF - DR - DB - DL - LABEL FCW COST 1
+UB - UR - UF - UL - FU - FR - FD - FL - RU - RB - RD - RF - BU - BL - BD - BR - LU - LF - LD - LB - DF - DR - DB - DL - => UB - UR - DF - UL - FD - FL - FU - FR - RU - RB - RD - LF - BU - BL - BD - BR - LU - RF - LD - LB - UF - DR - DB - DL - LABEL F180 COST 1
+UB - UR - UF - UL - FU - FR - FD - FL - RU - RB - RD - RF - BU - BL - BD - BR - LU - LF - LD - LB - DF - DR - DB - DL - => UB - UR - RF - UL - FR - FD - FL - FU - RU - RB - RD - DF - BU - BL - BD - BR - LU - UF - LD - LB - LF - DR - DB - DL - LABEL FCCW COST 1
+UB - UR - UF - UL - FU - FR - FD - FL - RU - RB - RD - RF - BU - BL - BD - BR - LU - LF - LD - LB - DF - DR - DB - DL - => UB - FR - UF - UL - FU - DR - FD - FL - RF - RU - RB - RD - BU - BL - BD - UR - LU - LF - LD - LB - DF - BR - DB - DL - LABEL RCW COST 1
+UB - UR - UF - UL - FU - FR - FD - FL - RU - RB - RD - RF - BU - BL - BD - BR - LU - LF - LD - LB - DF - DR - DB - DL - => UB - DR - UF - UL - FU - BR - FD - FL - RD - RF - RU - RB - BU - BL - BD - FR - LU - LF - LD - LB - DF - UR - DB - DL - LABEL R180 COST 1
+UB - UR - UF - UL - FU - FR - FD - FL - RU - RB - RD - RF - BU - BL - BD - BR - LU - LF - LD - LB - DF - DR - DB - DL - => UB - BR - UF - UL - FU - UR - FD - FL - RB - RD - RF - RU - BU - BL - BD - DR - LU - LF - LD - LB - DF - FR - DB - DL - LABEL RCCW COST 1
+UB - UR - UF - UL - FU - FR - FD - FL - RU - RB - RD - RF - BU - BL - BD - BR - LU - LF - LD - LB - DF - DR - DB - DL - => LB - UR - UF - UL - FU - FR - FD - FL - RU - UB - RD - RF - BL - BD - BR - BU - LU - LF - LD - DB - DF - DR - RB - DL - LABEL BCW COST 1
+UB - UR - UF - UL - FU - FR - FD - FL - RU - RB - RD - RF - BU - BL - BD - BR - LU - LF - LD - LB - DF - DR - DB - DL - => DB - UR - UF - UL - FU - FR - FD - FL - RU - LB - RD - RF - BD - BR - BU - BL - LU - LF - LD - RB - DF - DR - UB - DL - LABEL B180 COST 1
+UB - UR - UF - UL - FU - FR - FD - FL - RU - RB - RD - RF - BU - BL - BD - BR - LU - LF - LD - LB - DF - DR - DB - DL - => RB - UR - UF - UL - FU - FR - FD - FL - RU - DB - RD - RF - BR - BU - BL - BD - LU - LF - LD - UB - DF - DR - LB - DL - LABEL BCCW COST 1
+UB - UR - UF - UL - FU - FR - FD - FL - RU - RB - RD - RF - BU - BL - BD - BR - LU - LF - LD - LB - DF - DR - DB - DL - => UB - UR - UF - BL - FU - FR - FD - UL - RU - RB - RD - RF - BU - DL - BD - BR - LB - LU - LF - LD - DF - DR - DB - FL - LABEL LCW COST 1
+UB - UR - UF - UL - FU - FR - FD - FL - RU - RB - RD - RF - BU - BL - BD - BR - LU - LF - LD - LB - DF - DR - DB - DL - => UB - UR - UF - DL - FU - FR - FD - BL - RU - RB - RD - RF - BU - FL - BD - BR - LD - LB - LU - LF - DF - DR - DB - UL - LABEL L180 COST 1
+UB - UR - UF - UL - FU - FR - FD - FL - RU - RB - RD - RF - BU - BL - BD - BR - LU - LF - LD - LB - DF - DR - DB - DL - => UB - UR - UF - FL - FU - FR - FD - DL - RU - RB - RD - RF - BU - UL - BD - BR - LF - LD - LB - LU - DF - DR - DB - BL - LABEL LCCW COST 1
+UB - UR - UF - UL - FU - FR - FD - FL - RU - RB - RD - RF - BU - BL - BD - BR - LU - LF - LD - LB - DF - DR - DB - DL - => UB - UR - UF - UL - FU - FR - LD - FL - RU - RB - FD - RF - BU - BL - RD - BR - LU - LF - BD - LB - DL - DF - DR - DB - LABEL DCW COST 1
+UB - UR - UF - UL - FU - FR - FD - FL - RU - RB - RD - RF - BU - BL - BD - BR - LU - LF - LD - LB - DF - DR - DB - DL - => UB - UR - UF - UL - FU - FR - BD - FL - RU - RB - LD - RF - BU - BL - FD - BR - LU - LF - RD - LB - DB - DL - DF - DR - LABEL D180 COST 1
+UB - UR - UF - UL - FU - FR - FD - FL - RU - RB - RD - RF - BU - BL - BD - BR - LU - LF - LD - LB - DF - DR - DB - DL - => UB - UR - UF - UL - FU - FR - RD - FL - RU - RB - BD - RF - BU - BL - LD - BR - LU - LF - FD - LB - DR - DB - DL - DF - LABEL DCCW COST 1
+
+GOAL WHITE - WHITE - WHITE - WHITE - WHITE - WHITE - WHITE - WHITE - WHITE - WHITE - WHITE - WHITE - YELLOW - YELLOW - YELLOW - YELLOW - ORANGE - ORANGE - ORANGE - ORANGE - WHITE - WHITE - WHITE - WHITE -
