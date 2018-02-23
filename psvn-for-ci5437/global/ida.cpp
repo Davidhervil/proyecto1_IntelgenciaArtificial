@@ -41,7 +41,7 @@ std::pair<bool,unsigned int> dfs_ida(unsigned int bound,unsigned int g, int hist
 
     init_fwd_iter(&iter, &state);
     while( (ruleid = next_ruleid(&iter) ) >= 0) {
-        printf("hola\n");
+        //printf("hola\n");
         if( !fwd_rule_valid_for_history(history, ruleid )){
             continue;
         }
@@ -51,7 +51,7 @@ std::pair<bool,unsigned int> dfs_ida(unsigned int bound,unsigned int g, int hist
         state = child;
         if(h_value() < UINT_MAX)
         {
-            printf("Aqui\n");
+            //printf("Aqui\n");
             std::pair<bool, unsigned int> p = dfs_ida(bound, cost, aux_history);
             if(p.first) return p;
             t = std::min(t, p.second);
