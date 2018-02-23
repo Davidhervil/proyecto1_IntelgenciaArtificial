@@ -52,6 +52,7 @@ std::pair<bool,unsigned int> dfs_ida(unsigned int bound,unsigned int g, int hist
     } 
 
     init_fwd_iter(&iter, &state);
+
     while( (ruleid = next_ruleid(&iter) ) >= 0 && difftime(end,start)<timeout) {
         generatedCount++;                                          // Agregar cada hijo generado a la cuenta.
         if( !fwd_rule_valid_for_history(history, ruleid )){
@@ -90,7 +91,7 @@ unsigned int idaStar(){
 int main(int argc, char **argv) {
     // Leer argumentos
     if( argc < 2 ) {
-        printf("Usage: %s <timeout> <test> <pdb>\n", argv[0]);
+        printf("Usage: %s <timeout> <pdb>\n", argv[0]);
         exit(-1);
     }
     // Leer archivos
