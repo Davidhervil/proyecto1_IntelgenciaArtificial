@@ -2,6 +2,7 @@ abstractor
 *.abst
 *.breathFirstSearch
 *.ida
+*.AStar
 *.pdb
 *.o
 *.dist

@@ -33,10 +33,6 @@ psvn2c_abstraction.c:
 	$(CXX) $(OPT) ../../../psvn-for-ci5437/global/distSummary.cpp -include $< -o $@
 	rm -f $*.c
 
-%.noPruneSearch: %.c ../../../psvn-for-ci5437/global/noPruneSearch.cpp
-	$(CXX) $(OPT) ../../../psvn-for-ci5437/global/noPruneSearch.cpp -include $< -o $@
-	rm -f $*.c
-
 abstractor:
 	$(CXX) $(OPT) ../../../psvn-for-ci5437/src/abstractor.cpp ../../../psvn-for-ci5437/src/psvn.cpp -o $@
 
@@ -71,7 +67,11 @@ generator: $(ss).c
 	$(CXX) $(OPT) ../../../psvn-for-ci5437/global/parcialPruneExplore.cpp -include $< -o $@
 	rm -f $*.c
 
+%.AStar: %.c ../../../psvn-for-ci5437/global/AStar.cpp
+	$(CXX) $(OPT) ../../../psvn-for-ci5437/global/AStar.cpp -include $< -o $@
+	rm -f $*.c
+
 .PHONY: clean
 clean:
-	rm -fr *.succ *.dist *.distSummary *.noPruneSearch *.dist_pdb *.breathFirstSearch *.ida *.parcialPruneExplore *noPruneExplore psvn2c_core.c psvn2c_state_map.c psvn2c_abstraction.c *.dSYM *.o *~
+	rm -fr *.succ *.dist *.distSummary *.noPruneSearch *.dist_pdb *.breathFirstSearch *.ida *AStar *.parcialPruneExplore *noPruneExplore psvn2c_core.c psvn2c_state_map.c psvn2c_abstraction.c *.dSYM *.o *~
 	
