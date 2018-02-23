@@ -1,3 +1,11 @@
-sh 4_12Disks/runNoPrune.sh
-sh 4_14Disks/runNoPrune.sh
-sh 4_18Disks/runNoPrune.sh
+cd 4_12Disks/
+sh runNoPrune.sh
+cd ..
+
+cd 4_14Disks/
+sh runNoPrune.sh
+cd ..
+
+cd 4_18Disks/
+sh runNoPrune.sh
+cd ..
