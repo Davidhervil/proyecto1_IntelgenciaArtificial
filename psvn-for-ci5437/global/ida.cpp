@@ -24,9 +24,7 @@ unsigned int h_value()
     state_t abst_state;
     abstract_state(abst, &state, &abst_state);
     int *pdb_value = state_map_get(pdb, &abst_state);
-    if(pdb_value != NULL);
-    printf("%d \n", *pdb_value);
-        return *pdb_value;
+    return *pdb_value;
 }
 
 std::pair<bool,unsigned int> dfs_ida(unsigned int bound,unsigned int g, int history)
@@ -43,7 +41,7 @@ std::pair<bool,unsigned int> dfs_ida(unsigned int bound,unsigned int g, int hist
 
     init_fwd_iter(&iter, &state);
     while( (ruleid = next_ruleid(&iter) ) >= 0) {
-        printf("hola");
+        printf("hola\n");
         if( !fwd_rule_valid_for_history(history, ruleid )){
             continue;
         }
@@ -53,13 +51,13 @@ std::pair<bool,unsigned int> dfs_ida(unsigned int bound,unsigned int g, int hist
         state = child;
         if(h_value() < UINT_MAX)
         {
-            printf("Aqui");
+            printf("Aqui\n");
             std::pair<bool, unsigned int> p = dfs_ida(bound, cost, aux_history);
             if(p.first) return p;
             t = std::min(t, p.second);
         }
         apply_bwd_rule(ruleid, &state, &child);
-        history = next_bwd_history(aux_history, ruleid);
+        //history = next_bwd_history(aux_history, ruleid);
         state = child;
     }
     return std::pair<unsigned int, unsigned int>(false, t);
@@ -68,9 +66,9 @@ std::pair<bool,unsigned int> dfs_ida(unsigned int bound,unsigned int g, int hist
 int idaStar(){
     while(true)
     {
-        int bound  = h_value();
+        unsigned int bound  = h_value();
         std::pair<bool, unsigned int> p = dfs_ida(bound, 0, init_history);
-        if(p.first); return 0;
+        if(p.first) return 0;
             bound = p.second;
     }
     return 1;
@@ -98,6 +96,7 @@ int main(int argc, char **argv) {
     pdb = read_state_map(pdb_file);
     fclose(pdb_file);
 
+    printf("MEMES\n");
     // Leer linea por linea de la libreria estandar          
     char testCase[4098];
     while(fgets(testCase, sizeof(testCase), stdin))
