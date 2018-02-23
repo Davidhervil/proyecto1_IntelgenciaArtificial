@@ -20,19 +20,30 @@ double dif;
 long long generatedCount, expandedCount;
 int instancia = 0; // Numero de nodos generados
 time_t start,end;  // Tiempo de inicio
+int heur_type = 0; // 0 para MAX, otro para ADD.
 
 unsigned int h_value()
 {
     unsigned int value = 0;
+    if(heur_type==0){
+        for (unsigned int i=0; i<pdbs.size(); i++){
+            state_t abst_state;
+            abstract_state((abstractions)[i], &state, &abst_state);
+            int *pdb_value = state_map_get((pdbs)[i], &abst_state);
+            if(*pdb_value > value){
+                value = *pdb_value;
+            }
+        }
+        return value;
+    }
     for (unsigned int i=0; i<pdbs.size(); i++){
         state_t abst_state;
         abstract_state((abstractions)[i], &state, &abst_state);
         int *pdb_value = state_map_get((pdbs)[i], &abst_state);
-        if(*pdb_value > value){
-            value = *pdb_value;
-        }
+        value += *pdb_value;
     }
     return value;
+
 }
 
 std::pair<bool,unsigned int> dfs_ida(unsigned int bound,unsigned int g, int history)
@@ -100,6 +111,9 @@ int main(int argc, char **argv) {
 
     char line[1024];
     std::ifstream infile(argv[2]);
+    if(argc == 4){
+        heur_type = atoi(argv[3]);
+    }
     while (infile >> line){
         // Cargar PDBs y abstracciones.
         const char *pdb_name  = line;  // PDB a utilizar. (Debe ser una lista).
