@@ -9,6 +9,7 @@
 #include <sys/time.h>
 #include <fstream>
 #include <unistd.h>
+#include <iostream>
 #include "priority_queue.hpp"
 
 using namespace std;
@@ -52,7 +53,7 @@ int h(int additive_h, state_t state){
     return value;
 }
 
-unsigned int astar(int additive_h, state_t root_state){
+int astar(int additive_h, state_t root_state){
     state_t state, child;   // NOTE: "child" will be a predecessor of state, not a successor
     int ruleid;
     ruleid_iterator_t iter;
@@ -114,7 +115,7 @@ unsigned int astar(int additive_h, state_t root_state){
         }
     }
 
-    return UINT_MAX;
+    return -1;
 }
 
 int main(int argc, char **argv) {
@@ -131,12 +132,11 @@ int main(int argc, char **argv) {
     double dif;
     ssize_t nchars;
 
-    printf("%d\n",additive_h );
-
     char line[1024];
-    std::ifstream infile(argv[2]);
+    ifstream infile(argv[2]);
     while (infile >> line){
         // Cargar PDBs y abstracciones.
+        cout<<"Cargando "<<line<<endl;
         const char *pdb_name  = line;  // PDB a utilizar. (Debe ser una lista).
         strcpy(pdb_fname, pdb_name);      // Crear nombres con extensiones.
         strcat(pdb_fname, ".pdb");        
@@ -147,6 +147,8 @@ int main(int argc, char **argv) {
         abstractions.push_back(read_abstraction_from_file(abst_fname));
         fclose(pdb_file);
     }
+
+    printf("PDBs cargados\n");
 
     // Leer linea por linea de la entrada estandar          
     char testCase[4098];
