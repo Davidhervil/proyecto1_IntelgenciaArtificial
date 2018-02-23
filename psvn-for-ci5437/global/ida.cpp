@@ -91,7 +91,7 @@ unsigned int idaStar(){
 int main(int argc, char **argv) {
     // Leer argumentos
     if( argc < 2 ) {
-        printf("Usage: %s <timeout> <test> <pdb>\n", argv[0]);
+        printf("Usage: %s <timeout> <pdb>\n", argv[0]);
         exit(-1);
     }
     // Leer archivos
