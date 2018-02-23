@@ -1,1 +1,3 @@
-sh Hanoi/runNoPrune.sh
+cd Hanoi/
+sh runNoPrune.sh
+cd ..
