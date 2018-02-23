@@ -5,71 +5,85 @@
 #include <vector>
 #include <queue>
 #include <map>
+#include <ctime>
+#include <sys/time.h>
+#include <fstream>
+#include <unistd.h>
 #include "priority_queue.hpp"
 
-long long bounded_dfs_visit (state_t state, long long d, long long bound){
-    int ruleid;
-    long long nodes=0;
-    state_t child;
-    ruleid_iterator_t iter;
+using namespace std;
 
-    if (d >= bound ) return 1;
+typedef struct 
+{
+    state_t state;
+    int g;
+    int hist;
+}node;
+
+
+vector<abstraction_t *> abstractions;    // Vector de abstracciones
+vector<state_map_t *>   pdbs;
+long long generatedCount, expandedCount;
+time_t start,end;  // Tiempo de inicio
+int timeout;
+
+int h(int additive_h, state_t state){
+
+    int value = 0;
     
-    init_bwd_iter(&iter, &state);
-    while( (ruleid = next_ruleid(&iter) ) >= 0 ) {
-        apply_bwd_rule(ruleid, &state, &child);
-        long long current = bounded_dfs_visit(child, d+1, bound);
-        nodes += current;
+    if (additive_h){
+        for (unsigned int i=0; i<pdbs.size(); i++){
+            state_t abst_state;
+            abstract_state((abstractions)[i], &state, &abst_state);
+            int *pdb_value = state_map_get((pdbs)[i], &abst_state);
+            value += *pdb_value;
+        }
     }
-    return nodes;
-
+    else {
+        for (unsigned int i=0; i<pdbs.size(); i++){
+            state_t abst_state;
+            abstract_state((abstractions)[i], &state, &abst_state);
+            int *pdb_value = state_map_get((pdbs)[i], &abst_state);
+            if(*pdb_value > value){
+                value = *pdb_value;
+            }
+        }   
+    }
+    return value;
 }
 
-int main(int argc, char **argv) {
+unsigned int astar(int additive_h, state_t root_state){
     state_t state, child;   // NOTE: "child" will be a predecessor of state, not a successor
-    int goalIter, ruleid, bestF;
-    long long nodesAtD, bound;
+    int ruleid;
     ruleid_iterator_t iter;
-    map<std::uint64_t, short> colors;
+    map<uint64_t, short> colors;
+    node init, current, child_node;
 
-    PriorityQueue<state_t> open; // used for the states we have generated but not yet expanded (the OPEN list)
+    PriorityQueue<node> open; // used for the states we have generated but not yet expanded (the OPEN list)
     state_map_t *map = new_state_map(); // contains the cost-from-init-to-goal
-    FILE *file; // the final state_map is written to this file if it is provided (command line argument)
 
-    //RECORDAR QUE HAY QUE LEER UN ESTADO PARA INICIAR LA BUSQUEDA
-    printf("Please enter a state followed by ENTER: ");
-    if( fgets(str, sizeof str, stdin) == NULL ) {
-        printf("Error: empty input line.\n");
-        return 0; 
-    }
+    // add root state
+    init.state = root_state;
+    init.g = 0;
 
-    // CONVERT THE STRING TO A STATE
-    nchars = read_state(str, &state);
-    if( nchars <= 0 ) {
-        printf("Error: invalid state entered.\n");
-        return 0; 
-    }
+    state_map_add(map, &(init.state), 0);
+    colors.insert(pair<uint64_t,short>(hash_state(&init.state),0));
+    open.Add(h(additive_h,init.state),0,init);
 
-    // add goal states
-    state_map_add(map, &state, 0);
-    colors.insert(std::pair<uint64_t,short>(hash_state(&state),0));
-
-    bound = 0;
-    nodesAtD = 0;
-    while( !open.Empty() ) {
+    while( !open.Empty() || difftime(end,start)<timeout )  {
         
-        bestF = open.CurrentPriority();
         // remove top state from priority state
-        state = open.Top();
+        current = open.Top();
+        state = current.state;
         open.Pop();
 
         const int *known_dist = state_map_get(map, &state);
         assert(known_dist != NULL);
-        if( *known_dist > bestF ){
-            state_map_add(map, &state, d);
+        if( *known_dist > current.g ){
+            state_map_add(map, &state, current.g);
             if(is_goal(&state)){
                 printf("SOLVED :D\n");
-                return;
+                return current.g;
             }
 
             init_fwd_iter(&iter, &state);
@@ -79,26 +93,79 @@ int main(int argc, char **argv) {
                 // Se supone que if h(s) < INFNIY pero en los problemas a tratar
                 // siempre se satisface
 
-                colors.insert(std::pair<uint64_t,short>(hash_state(&child),0));
-                const int child_d = d + get_fwd_rule_cost(ruleid);
+                colors.insert(pair<uint64_t,short>(hash_state(&child),0));
+                const int child_g = current.g + get_fwd_rule_cost(ruleid);
 
-                open.Add(child_d, child_d, child);
+                child_node.state = child;
+                child_node.g = child_g;
+                open.Add(child_g + h(additive_h, child), child_g, child_node);
+                generatedCount++;
                 
                 // check if either this child has not been seen yet or if
                 // there is a new cheaper way to get to this child.
-                const int *old_child_d = state_map_get(map, &child);
-                if( (old_child_d == NULL) || (*old_child_d > child_d) ) {
+                const int *old_child_g = state_map_get(map, &child);
+                if( (old_child_g == NULL) ) { //|| (*old_child_g > child_g) ) {
                     // add to open with the new distance
-                    state_map_add(map, &child, child_d);
-                    open.Add(child_d, child_d, child);
+                    state_map_add(map, &child, child_g);
+                    //open.Add(child_d, child_d, child);
                 }
             }
+            expandedCount++;
         }
+    }
 
-        nodesAtD = bounded_dfs_visit(state, 0, bound);
-        printf("%lld nodes at depth %lld\n", nodesAtD, bound);
-        bound++;
-        
+    return UINT_MAX;
+}
+
+int main(int argc, char **argv) {
+    state_t state;
+    if( argc < 3 ) {
+        printf("Usage: %s <timeout> <pdb> <additive_h>\n", argv[0]);
+        exit(-1);
+    }
+    // Leer archivos
+    char pdb_fname[1024], test_fname[1024], abst_fname[1024];
+    timeout = atoi(argv[1]);          // Tiempo maximo permitido.
+
+    int instancia=0, additive_h = atoi(argv[3]);
+    double dif;
+    ssize_t nchars;
+
+    printf("%d\n",additive_h );
+
+    char line[1024];
+    std::ifstream infile(argv[2]);
+    while (infile >> line){
+        // Cargar PDBs y abstracciones.
+        const char *pdb_name  = line;  // PDB a utilizar. (Debe ser una lista).
+        strcpy(pdb_fname, pdb_name);      // Crear nombres con extensiones.
+        strcat(pdb_fname, ".pdb");        
+        strcpy(abst_fname, pdb_name);
+        strcat(abst_fname, ".abst");
+        FILE *pdb_file = fopen(pdb_fname, "r");          // Abrir y Leer PDB
+        pdbs.push_back(read_state_map(pdb_file));        // Guardar PDB y ABS. 
+        abstractions.push_back(read_abstraction_from_file(abst_fname));
+        fclose(pdb_file);
+    }
+
+    // Leer linea por linea de la entrada estandar          
+    char testCase[4098];
+    while(fgets(testCase, sizeof(testCase), stdin))
+    {
+        FILE * pFile;
+        pFile = fopen ("resultsAStar.txt","a");
+        generatedCount = 0;
+        expandedCount = 0;
+        nchars = read_state(testCase, &state);  // Crear estado
+        time (&start);
+        time (&end);
+        int result = astar(additive_h,state);
+        time (&end);
+        dif = difftime(end,start);
+        printf("%d : %s : %lld %lld %lf %d %g \n",instancia, testCase ,expandedCount, generatedCount, dif, result, generatedCount/dif);
+        fprintf(pFile, "%d : %s : %lld %lld %lf %d %g \n",instancia, testCase,expandedCount, generatedCount, dif, result, generatedCount/dif);
+        fclose (pFile);
+        instancia++;
     }
     
     return 0;
